@@ -1,5 +1,3 @@
-# deja-code-codechef
-
 Déjà Code: finding CodeChef problems that share the same idea
 
 Imagine a monk climbing a huge staircase to a temple door. He can take one step or two at a time, and he has to count the ways to reach the top. Now imagine a plain problem that just says: "You can climb 1 or 2 stairs at a time. How many ways to climb N stairs?"
@@ -29,7 +27,6 @@ find_similar("Given a tree, find the diameter, the longest path between any two 
 mode can be "semantic" (meaning), "tfidf" (keywords) or "hybrid" (both).
 
 WHAT DATA DID I USE?
-
 
 Only questions.csv from the Kaggle dataset: 1,474 problems with title, statement, difficulty, tags and author.
 
@@ -65,7 +62,7 @@ Two ways, because neither one is perfect.
 
 A. Topic tags (automatic, 474 problems with a clear topic). If I search with a problem and the top 5 results share its topic tag, that's a hit. This is big but crude: two problems can share an idea without sharing a tag, and the reverse. A random guess scores 0.054.
 
-B. A hand-marked query set (small, but closer to the real task). I wrote 20 one-line queries (like "Count the palindromic substrings of a string") and read the top-5 results of every method in full. A result counts as relevant only if it asks for the same task (or a harder variant of it). Sharing a topic like "graph" doesn't count. I dropped 2 queries I worded badly, which leaves 18 queries. Because each method's results came from different searches, I pooled everything I'd seen into one answer key, so no method is judged against results the others never showed.
+B. A hand-marked query set (small, but closer to the real task). I wrote 20 one-line queries (like "Count the palindromic substrings of a string") and read the top-5 results of every method in full. A result counts as relevant only if it asks for the same task (or a harder variant of it). Sharing a topic like "graph" doesn't count. I dropped 2 queries I worded badly, which leaves 18 queries. I marked relevance by reading the top-5 results of two methods (TF-IDF and the final system), so those two are in the answer key. A relevant problem that only another method found, and neither of those two did, would be missing from the key, which means the other three rows are lower bounds.
 
 Results: topic tags
 Method	Precision@5	MRR	Same-author neighbours	Max times one problem is in a top-5	Problems never in any top-5
@@ -114,10 +111,9 @@ The silhouette score is only about 0.02 to 0.03 for every k I tried, and it stay
 
 WHERE DOES IT FAIL?
 
-
 This is the part I think matters most.
 
-1. Embeddings find topics, not techniques. Search works well when the query is about what the problem is about: strings, geometry, segment trees, trees and graphs. It does much worse at "the same trick", like binary search on the answer, XOR tricks or expected value. Even the best method found at least one relevant result for only 12 of my 18 queries, and the misses were queries about a technique or a mathematical trick, not a topic. (Check the per-query results in the notebook before you quote exact queries.)
+1. Embeddings find topics, not techniques. Search works well when the query is about what the problem is about: strings, geometry, segment trees, trees and graphs. It does much worse at "the same trick", like binary search on the answer, XOR tricks or expected value. Even the best method found at least one relevant result for only 12 of my 18 queries. For 4 of the queries I couldn't find any relevant problem in anything the methods returned: the cheapest-items-on-a-budget greedy query, polygon area, the expected value of dice rolls, and Fibonacci modulo a prime. Three of those are techniques; polygon area is a plain geometry task, so this isn't only about techniques. Also, the 4 empty queries may have a relevant problem that none of the methods surfaced at all.
 
 2. A long story buries the idea. The monk problem from the top of this README is real: it's CodeChef's "Climbing Stairs", and a long monk-and-temple story hides a 1-or-2-steps recurrence in the middle. For my stairs query, TF-IDF ranked it 1st (the words "stairs" and "steps" are in there), while the original embeddings ranked it 225th, cleaned 134th, and cleaned + centered 98th. The hybrid ranked it 1st, but only because the keywords carried it.
 
@@ -130,7 +126,6 @@ This is the part I think matters most.
 6. Truncated and broken data. A few statements in the raw data are cut off mid-sentence (for example "Greedy Trip") or are scraped web code. I found these late, excluded the scraped-code ones from search results, and can't fix the truncated ones.
 
 LIMITATIONS
-
 Small evaluation. 18 hand-marked queries, written and judged by one person (me). The ranges above are wide, and nothing here proves a winner.
 Judgment calls in the answer key. "Relevant" means the same task or a harder variant. Someone else might have drawn that line differently. I also corrected my own marking in places once I read the full statements.
 Tags are a crude yardstick. They exist for only 620 of 1,424 problems, and I only used the 474 with a sharp topic.
