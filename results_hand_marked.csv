@@ -1,0 +1,6 @@
+,Precision@5 (hand-marked),95% range,Diff vs TF-IDF (95%),Queries with a hit (of 18)
+TF-IDF,0.111,0.04 to 0.20,+0.00 to +0.00,7
+Embeddings (original),0.156,0.09 to 0.22,-0.03 to +0.12,11
+Embeddings (cleaned),0.211,0.13 to 0.30,+0.02 to +0.19,12
+Embeddings (cleaned + centered),0.2,0.11 to 0.29,+0.00 to +0.18,11
+Hybrid (centered + TF-IDF),0.156,0.09 to 0.23,+0.01 to +0.09,11

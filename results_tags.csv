@@ -1,0 +1,5 @@
+,Precision@5 (tags),MRR (tags),Top-5 neighbours with same author,Max times one problem is in a top-5,Problems never in any top-5,Cluster agreement with tags (NMI)
+TF-IDF,0.125,0.27,0.175,44.0,116.0,
+Embeddings (original),0.154,0.316,0.138,42.0,217.0,0.2
+Embeddings (cleaned),0.123,0.258,0.097,45.0,196.0,0.254
+Embeddings (cleaned + centered),0.132,0.268,0.098,26.0,78.0,0.243
