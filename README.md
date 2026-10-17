@@ -34,7 +34,6 @@ The dataset also has solutions.csv and about 1.2 GB of code files. I deliberatel
 
 HOW DID I CLEAN IT?
 
-
 Look, raw problem statements are messy. Here's what I did and why:
 
 Removed boilerplate. Every statement starts with "All submissions for this problem are available." That's noise, and it would make every problem look a little bit similar.
@@ -108,6 +107,32 @@ The clean ones: strings (7), geometry (2), trees and graphs (4), queries (3), ga
 The weak ones: 1, 5, 10 and 11. "time, minutes, server" and "dishes, dish, items" are clusters of story, not idea. A cooking story is a cooking story whether the maths underneath is dp or greedy.
 
 The silhouette score is only about 0.02 to 0.03 for every k I tried, and it stays flat. That means the data doesn't have sharp, well-separated groups. Problems blend into each other, so 12 is a reasonable summary, not a discovery. Cluster agreement with the topic tags (NMI) is 0.200 for the original embeddings and 0.254 for the cleaned ones.
+
+WHAT DOES IT ACTUALLY RETURN?
+
+Here are three real runs of find_similar(query, k=5). I'm showing the good, the half-good and the bad one on purpose.
+
+1. Works well: palindromes. Query: "Given a string, count how many substrings of it are palindromes."
+
+Meaning search	Keyword search	Hybrid
+Girl Friend and String Gift	3-Palindromes	3-Palindromes
+3-Palindromes	Girl Friend and String Gift	Girl Friend and String Gift
+Lucy and Palindromes	Puppy and Palindromes	Puppy and Palindromes
+Count palindromes	Codechef Password Recovery	Lucy and Palindromes
+Palindromic substrings	Palindrome Palindrome	Palindrome Palindrome
+
+All three modes stay inside palindrome problems, and "Palindromic substrings" and "3-Palindromes" are real substring-palindrome problems. Meaning search is a bit cleaner: keyword search drifts to "Codechef Password Recovery", which is a graph-tagged problem that shares words with the query.
+
+2. Half-works: the stairs query. Query: "Count the number of ways to climb N stairs taking 1 or 2 steps at a time."
+
+Keyword search and the hybrid both rank Climbing Stairs first.
+Meaning search never finds it in the top 5. It returns "Stepping Numbers", "Robot Movings" and "Number of Ways", which are about counting or steps in a loose way, but none of them is the stairs problem.
+
+This is the buried-idea failure from the next section, and the hybrid only gets it right because the keywords carry it.
+
+3. Right topic, can't tell if the idea matches: the tree query. Query: "Given a tree, find the diameter, the longest path between any two nodes."
+
+All three modes return tree problems (Tree, Trees Again, Chef and Trees, Path containing K Nodes, Prime Distance On Tree). I didn't check whether any of them is really a tree-diameter problem, so I'm not claiming it is. What I can say is the topic is right. This is the kind of result tag-based evaluation would count as a hit and my hand-marked evaluation would be strict about.
 
 WHERE DOES IT FAIL?
 
